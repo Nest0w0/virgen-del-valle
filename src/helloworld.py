@@ -6,15 +6,22 @@ def raiseFrame(frame):
 
 if __name__ == '__main__':
 	root = Tk()
-	f1 = Frame(root)
-	f2 = Frame(root)
-	f1.grid(column = 0, row = 0)
-	f2.grid(column = 0, row = 0)
+	root.geometry("300x300")
+	root.title("Prueba")
+	root.resizable(False,False)
 
-	Label(f1, text = 'FRAME 1').pack()
-	Button(f1, text = 'Ir a frame 2', command = lambda: raiseFrame(f2)).pack()
-	Label(f2, text = 'FRAME 2').pack()
-	Button(f2, text = 'Ir a frame 1', command = lambda: raiseFrame(f1)).pack()
+	#configura las columnas
+	root.columnconfigure(0, weight = 1)
+	root.columnconfigure(1, weight = 2)
 
-	raiseFrame(f1)
+	usernamelabel = ttk.Label(root, text = 'Username:')
+	usernamelabel.grid(row = 0, column = 0)
+	passwordlabel = ttk.Label(root, text = 'Password:')
+	passwordlabel.grid(row = 1, column = 0)
+
+
+	usernameentry = ttk.Entry(root)
+	usernameentry.grid(row = 0, column = 1)
+	passwordentry = ttk.Entry(root, show = '*')
+	passwordentry.grid(row = 1, column = 1)
 	root.mainloop()
