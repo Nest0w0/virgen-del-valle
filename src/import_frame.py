@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
+import os
 
 class importFrame(tk.Frame):
 
@@ -33,6 +35,14 @@ class importFrame(tk.Frame):
 		self.rowconfigure(6, weight = 1)
 		self.rowconfigure(7, weight = 1)
 
+	def buildLabel(self):
+		labelImportar = ttk.Label(
+			self,
+			text = 'Importar'
+		)
+		labelImportar.grid(column = 0, row = 6)
+
+
 	def buildButtons(self, controller):
 		volver = ttk.Button(
 			self,
@@ -41,12 +51,6 @@ class importFrame(tk.Frame):
 		)
 		volver.grid(column = 0, row = 0, pady = 5)
 
-		labelImportar = ttk.Label(
-			self,
-			text = 'Importar'
-		)
-		labelImportar.grid(column = 0, row = 6)
-
 		var = 0
 		importarDiferencia = ttk.Radiobutton(
 			self,
@@ -54,7 +58,7 @@ class importFrame(tk.Frame):
 			variable = var,
 			value = 1
 			)
-		importarDiferencia.grid(column = 1, row = 6)
+		importarDiferencia.grid(column = 0, row = 6)
 		
 		importarDestructiva = ttk.Radiobutton(
 			self,
@@ -62,4 +66,19 @@ class importFrame(tk.Frame):
 			variable = var,
 			value = 2
 			)
-		importarDestructiva.grid(column = 2, row = 6)
+		importarDestructiva.grid(column = 1, row = 6)
+
+		botonSeleccionar = ttk.Button(
+			self,
+			text = 'Seleccionar',
+			command = lambda: self.getExcelPath()
+		)
+		botonSeleccionar.grid(column = 2, row = 6)
+
+
+	def getExcelPath(self):
+		self.excel_path = filedialog.askdirectory(
+				parent = self,
+				initialdir = os.getcwd(),
+				title = 'Seleccione su archivo Excel'
+			)
