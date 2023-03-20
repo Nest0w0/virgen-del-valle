@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-class initialFrame(ttk.Frame):
+class initialFrame(tk.Frame):
 
 	def __init__(self, controller):
 		super().__init__(
@@ -11,6 +11,7 @@ class initialFrame(ttk.Frame):
 		self.options = {'padx': 0, 'pady': 0}
 		self.grid(sticky = 'nsew')
 		self.configureGeometry()
+		self['bg'] = '#81c1b0'
 		self.buildButtons(self.controller)
 		self.buildList()
 

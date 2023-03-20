@@ -13,7 +13,9 @@ class importFrame(tk.Frame):
 		self.options = {'padx': 0, 'pady': 0}
 		self.grid(sticky = 'nsew')
 		self.configureGeometry()
+		self['bg'] = '#81c1b0'
 		self.buildButtons(self.controller)
+		self.buildTable()
 
 
 	def configureGeometry(self):
@@ -42,6 +44,31 @@ class importFrame(tk.Frame):
 		)
 		labelImportar.grid(column = 0, row = 6)
 
+	def buildTable(self):
+		table = ttk.Treeview(self)
+		
+		table['columns'] = ('Nombre', 'Apellido', 'Cedula', 'Edad')
+		
+		
+		table.column('#0', width = 0)
+		table.column('Nombre')
+		table.column('Apellido')
+		table.column('Cedula')
+		table.column('Edad')
+
+		table.heading('Nombre', text = 'Nombre', anchor = 'center')
+		table.heading('Apellido', text = 'Apellido', anchor = 'center')
+		table.heading('Cedula', text = 'Cedula', anchor = 'center')
+		table.heading('Edad', text = 'Edad', anchor = 'center')
+
+		table.insert(
+			parent = '',
+			index = 'end',
+			text = '',
+			values = ('Nestor', 'Aguilar', '28316308', '22')
+		)
+		
+		table.grid(column = 0, row = 1, columnspan = 2, rowspan = 5)
 
 	def buildButtons(self, controller):
 		volver = ttk.Button(
@@ -77,8 +104,11 @@ class importFrame(tk.Frame):
 
 
 	def getExcelPath(self):
-		self.excel_path = filedialog.askdirectory(
+		self.imported_excel = filedialog.askopenfile(
 				parent = self,
 				initialdir = os.getcwd(),
-				title = 'Seleccione su archivo Excel'
+				title = 'Seleccione su archivo Excel',
+				filetypes = [('Archivos de Excel', '*.xlsx')]
 			)
+
+		print(self.imported_excel.name)

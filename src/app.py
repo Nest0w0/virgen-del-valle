@@ -14,6 +14,7 @@ class Root(Tk):
 			self.height
 			)
 		)
+		self['bg'] = '#81c1b0'
 		self.configureGeometry()
 		self.frames = {}
 		self.setFrames()
@@ -72,3 +73,6 @@ class Root(Tk):
 if __name__ == '__main__':
 	root = Root()
 	root.mainloop()
+
+#	background_color = '#81c1b0'
+#	buttons_color = '#2d997c'

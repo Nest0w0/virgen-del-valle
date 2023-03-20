@@ -12,13 +12,7 @@ if __name__ == '__main__':
 	root.title("Prueba")
 	root.resizable(False,False)
 
-	curdir = os.getcwd()
-	tempdir = filedialog.askdirectory(
-		parent = root,
-		initialdir = curdir,
-		title = 'Seleccione'
-	)
+	frame = Frame(root)
+	frame.pack()
 
-	if len(tempdir) > 0:
-		print("Eligió {}".format(tempdir))
-	root.mainloop()
+	tabla = ttk.Treeview(frame)
