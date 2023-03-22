@@ -1,74 +1,45 @@
 import tkinter as tk
+import os
+import numpy as np
+import pandas as pd
 from tkinter import ttk
 from tkinter import filedialog
-import os
+from app_frame import AppFrame
 
-class importFrame(tk.Frame):
+class importFrame(AppFrame):
 
 	def __init__(self, controller):
 		super().__init__(
 			controller
 		)
-		self.controller = controller
-		self.options = {'padx': 0, 'pady': 0}
-		self.grid(sticky = 'nsew')
-		self.configureGeometry()
-		self['bg'] = '#81c1b0'
 		self.buildButtons(self.controller)
-		self.buildTable()
-
-
-	def configureGeometry(self):
-		self.configureColumns()
-		self.configureRows()
-
-	def configureColumns(self):
-		self.columnconfigure(0, weight = 1)
-		self.columnconfigure(1, weight = 1)
-		self.columnconfigure(2, weight = 1)
-
-	def configureRows(self):
-		self.rowconfigure(0, weight = 1)
-		self.rowconfigure(1, weight = 1)
-		self.rowconfigure(2, weight = 1)
-		self.rowconfigure(3, weight = 1)
-		self.rowconfigure(4, weight = 1)
-		self.rowconfigure(5, weight = 1)
-		self.rowconfigure(6, weight = 1)
-		self.rowconfigure(7, weight = 1)
+		#self.buildTable()
+		self.buildLabel()
 
 	def buildLabel(self):
 		labelImportar = ttk.Label(
 			self,
 			text = 'Importar'
 		)
-		labelImportar.grid(column = 0, row = 6)
+		labelImportar.grid(column = 2, row = 0)
 
-	def buildTable(self):
-		table = ttk.Treeview(self)
-		
-		table['columns'] = ('Nombre', 'Apellido', 'Cedula', 'Edad')
-		
-		
-		table.column('#0', width = 0)
-		table.column('Nombre')
-		table.column('Apellido')
-		table.column('Cedula')
-		table.column('Edad')
+	def buildTable(self, dataFrame):
+		table = ttk.Treeview(self, show = 'headings')
+		table['columns'] = tuple(['id']) + tuple(dataFrame.columns.values)
 
-		table.heading('Nombre', text = 'Nombre', anchor = 'center')
-		table.heading('Apellido', text = 'Apellido', anchor = 'center')
-		table.heading('Cedula', text = 'Cedula', anchor = 'center')
-		table.heading('Edad', text = 'Edad', anchor = 'center')
+		table.column('id', width = 0, stretch = False)
+		table.heading('id', text = '', anchor = 'center')		
+		for column in dataFrame.columns.values:
+			table.heading('{}'.format(column), text = column, anchor = 'center')
 
-		table.insert(
-			parent = '',
-			index = 'end',
-			text = '',
-			values = ('Nestor', 'Aguilar', '28316308', '22')
-		)
-		
-		table.grid(column = 0, row = 1, columnspan = 2, rowspan = 5)
+		for i in range(len(dataFrame)):
+			table.insert(
+				parent = '',
+				index = 'end',
+				text = '',
+				values = tuple([i]) + tuple(dataFrame.iloc[i].values)
+			)		
+		table.grid(column = 0, row = 1, columnspan = 3, rowspan = 6)
 
 	def buildButtons(self, controller):
 		volver = ttk.Button(
@@ -108,7 +79,10 @@ class importFrame(tk.Frame):
 				parent = self,
 				initialdir = os.getcwd(),
 				title = 'Seleccione su archivo Excel',
-				filetypes = [('Archivos de Excel', '*.xlsx')]
+				filetypes = [('Archivos de Excel', '*.xlsx'),
+							('Archivos de Excel', '*.xls')]
 			)
 
-		print(self.imported_excel.name)
+		excel = pd.ExcelFile(self.imported_excel.name)
+		tabla = pd.read_excel(excel, 0)
+		self.buildTable(tabla)
