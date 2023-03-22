@@ -1,34 +1,22 @@
-from tkinter import *
-from tkinter import filedialog
+import tkinter as tk
 from tkinter import ttk
-import os
-import pandas as pd
-import numpy as np
-
-
-def buildTable(root, dataFrame):
-	table = ttk.Treeview(root)
-	table['columns'] = tuple(dataFrame.columns.values)
-
-	for i in dataFrame.columns.values:
-		table.heading('{}'.format(i), text = i, anchor = 'center')
-
-	for i in range(len(dataFrame)):
-		table.insert(
-			parent = '',
-			index = 'end',
-			text = '',
-			values = tuple(dataFrame.iloc[i].values)
-		)
-	
-	table.pack()
-	#table.grid(column = 0, row = 1, columnspan = 2, rowspan = 5)
-
 
 if __name__ == '__main__':
-	root = Tk()
-	excel = pd.ExcelFile('/home/noxtol/Desktop/sample.xlsx')
+	root = tk.Tk()
+	root.title('MALDITA SEA BARRAS DE SCROLL')
+	#root.grid_columnconfigure(0, weight = 1)
+	#root.grid_rowconfigure(0, weight = 1)
 
-	prueba = pd.read_excel(excel, 0)
-	buildTable(root, prueba)
+	text = tk.Text(root, height = 10)
+	text.pack(side = 'left', fill = 'y')
+
+	scroll = ttk.Scrollbar(root, orient = 'vertical', command = text.yview)
+	scroll.pack(side = 'right', fill = 'y')
+
+	text['yscrollcommand'] = scroll.set
+
+	for i in range(1,50):
+		position = '{}'.format(i)
+		text.insert(position, 'Line {}'.format(i))
+
 	root.mainloop()

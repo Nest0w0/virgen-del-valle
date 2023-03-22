@@ -5,6 +5,7 @@ import pandas as pd
 from tkinter import ttk
 from tkinter import filedialog
 from app_frame import AppFrame
+from table import Table
 
 class importFrame(AppFrame):
 
@@ -13,8 +14,8 @@ class importFrame(AppFrame):
 			controller
 		)
 		self.buildButtons(self.controller)
-		#self.buildTable()
 		self.buildLabel()
+		self.table = Table(self)
 
 	def buildLabel(self):
 		labelImportar = ttk.Label(
@@ -23,8 +24,23 @@ class importFrame(AppFrame):
 		)
 		labelImportar.grid(column = 2, row = 0)
 
+	def buildContainer(self):
+		container = tk.Frame(self)
+		container.grid(column = 0, row = 1, columnspan = 3, rowspan = 6)
+		horizontal_scroll = tk.Scrollbar(container , orient = 'horizontal')
+		horizontal_scroll.pack(side = 'bottom', fill = 'x')
+		vertical_scroll = tk.Scrollbar(container, orient = 'vertical')
+		vertical_scroll.pack(side = 'right', fill = 'y')
+
+		return container
+
 	def buildTable(self, dataFrame):
-		table = ttk.Treeview(self, show = 'headings')
+		container = self.buildContainer()
+		table = ttk.Treeview(
+				container,
+				show = 'headings',
+				yscrollcommand = container.vertical_scroll.set,
+				xscrollcommand = container.horizontal_scroll.set)
 		table['columns'] = tuple(['id']) + tuple(dataFrame.columns.values)
 
 		table.column('id', width = 0, stretch = False)
@@ -38,8 +54,9 @@ class importFrame(AppFrame):
 				index = 'end',
 				text = '',
 				values = tuple([i]) + tuple(dataFrame.iloc[i].values)
-			)		
-		table.grid(column = 0, row = 1, columnspan = 3, rowspan = 6)
+			)
+		table.pack()		
+		#table.grid(column = 0, row = 1, columnspan = 3, rowspan = 6)
 
 	def buildButtons(self, controller):
 		volver = ttk.Button(
@@ -85,4 +102,4 @@ class importFrame(AppFrame):
 
 		excel = pd.ExcelFile(self.imported_excel.name)
 		tabla = pd.read_excel(excel, 0)
-		self.buildTable(tabla)
+		self.table.buildTable(tabla)
